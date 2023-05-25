@@ -1,0 +1,7 @@
+{
+  "name": "playground",
+  "packageManager": "yarn@3.5.1",
+  "workspaces": [
+    "packages/*"
+  ]
+}
