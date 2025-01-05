@@ -1,12 +1,12 @@
 {
   "name": "playground",
-  "packageManager": "yarn@3.5.1",
+  "packageManager": "yarn@4.1.0",
   "workspaces": [
     "packages/*",
     "practice/*",
     "services/*"
   ],
   "dependencies": {
-    "typescript": "^5.0.4"
+    "typescript": "^5.7.2"
   }
 }
