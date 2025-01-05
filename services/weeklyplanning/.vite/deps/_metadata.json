@@ -1,0 +1,61 @@
+{
+  "hash": "89a94ff8",
+  "configHash": "5a5339ee",
+  "lockfileHash": "176d4b51",
+  "browserHash": "d8ba9167",
+  "optimized": {
+    "react": {
+      "src": "../../../../node_modules/react/index.js",
+      "file": "react.js",
+      "fileHash": "4e6ec00c",
+      "needsInterop": true
+    },
+    "react-dom": {
+      "src": "../../../../node_modules/react-dom/index.js",
+      "file": "react-dom.js",
+      "fileHash": "46d53123",
+      "needsInterop": true
+    },
+    "react/jsx-dev-runtime": {
+      "src": "../../../../node_modules/react/jsx-dev-runtime.js",
+      "file": "react_jsx-dev-runtime.js",
+      "fileHash": "e6d77f68",
+      "needsInterop": true
+    },
+    "react/jsx-runtime": {
+      "src": "../../../../node_modules/react/jsx-runtime.js",
+      "file": "react_jsx-runtime.js",
+      "fileHash": "57698627",
+      "needsInterop": true
+    },
+    "react-dom/client": {
+      "src": "../../../../node_modules/react-dom/client.js",
+      "file": "react-dom_client.js",
+      "fileHash": "f200dd7f",
+      "needsInterop": true
+    },
+    "dayjs": {
+      "src": "../../../../node_modules/dayjs/dayjs.min.js",
+      "file": "dayjs.js",
+      "fileHash": "be2808e4",
+      "needsInterop": true
+    },
+    "dayjs/plugin/isoWeek": {
+      "src": "../../../../node_modules/dayjs/plugin/isoWeek.js",
+      "file": "dayjs_plugin_isoWeek.js",
+      "fileHash": "cdb8d8bb",
+      "needsInterop": true
+    }
+  },
+  "chunks": {
+    "chunk-IGJZKXSS": {
+      "file": "chunk-IGJZKXSS.js"
+    },
+    "chunk-QQPPL4PP": {
+      "file": "chunk-QQPPL4PP.js"
+    },
+    "chunk-BUSYA2B4": {
+      "file": "chunk-BUSYA2B4.js"
+    }
+  }
+}
