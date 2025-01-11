@@ -1,14 +1,14 @@
-import { WeeklyPlanModelData } from "../type";
+import { Theme, Plan } from "../type";
 const weekDay = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"];
 
 export const aggregatedThemeDaysTime = ({
   themes,
-  title,
+  id,
 }: {
-  themes: WeeklyPlanModelData["themes"];
-  title: string;
+  themes: Plan["themes"];
+  id: Theme["id"];
 }) => {
-  const theme = themes.find((theme) => theme.title === title);
+  const theme = themes.find((theme) => theme.id === id);
   const defaultObj = Object.fromEntries(weekDay.map((day) => [day, 0]));
   if (!theme) return defaultObj;
   return theme.categories.reduce((acc, { actions }) => {
@@ -22,7 +22,7 @@ export const aggregatedThemeDaysTime = ({
 export const aggregatedWeekPlanDaysTime = ({
   themes,
 }: {
-  themes: WeeklyPlanModelData["themes"];
+  themes: Plan["themes"];
 }) => {
   return themes.reduce(
     (acc, { categories }) => {

@@ -17,7 +17,7 @@ export default function WeeklyPlanTableHead({
           {`${year}-${week}번째 주 계획`}
         </th>
         {weekDates.map((date) => (
-          <th>{date}</th>
+          <th key={date}>{date}</th>
         ))}
         <th rowSpan={2}>합계</th>
       </tr>

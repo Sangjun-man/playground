@@ -1,13 +1,9 @@
-import { WeeklyPlanModelData } from "../../type";
+import { Plan } from "../../type";
 import WeeklyPlanTableHead from "./Head";
 import WeeklyPlanTableTheme from "./Theme";
 import WeeklyPlanTableTimeSumRow from "./TimeSumRow";
 
-export default function WeeklyPlannerTable({
-  data,
-}: {
-  data: WeeklyPlanModelData;
-}) {
+export default function WeeklyPlannerTable({ data }: { data: Plan }) {
   return (
     <table border={1}>
       <thead>
