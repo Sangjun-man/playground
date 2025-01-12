@@ -72,18 +72,23 @@ export default function useHandleWeeklyPlanTable() {
     >
   ) => {
     setPlanState((prevPlanState) => {
-      planState.themes.forEach((theme, themeIndex) => {
-        const categoryIndex = theme.categories.findIndex(
+      let themeIndex = -1,
+        categoryIndex = -1;
+
+      planState.themes.forEach((theme, _themeIndex) => {
+        themeIndex = _themeIndex;
+        categoryIndex = theme.categories.findIndex(
           ({ id }) => id === options.id
         );
-
-        if (categoryIndex) {
-          prevPlanState.themes[themeIndex]["categories"].splice(
-            categoryIndex,
-            1
-          );
-        }
       });
+
+      if (categoryIndex >= 0) {
+        const targetTheme = prevPlanState.themes[themeIndex];
+        targetTheme.categories[categoryIndex] = {
+          ...targetTheme.categories[categoryIndex],
+          ...options,
+        };
+      }
       return JSON.parse(JSON.stringify(prevPlanState));
     });
   };
