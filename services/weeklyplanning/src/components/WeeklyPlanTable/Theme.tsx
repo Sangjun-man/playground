@@ -20,7 +20,7 @@ const weekDay = [
 ] as DayString[];
 
 export default function WeeklyPlanTableTheme({ themes }: { themes: Theme[] }) {
-  const { createTheme, createCategory } = useHandleWeeklyPlanTable();
+  const { createTheme } = useHandleWeeklyPlanTable();
 
   return (
     <>
@@ -35,9 +35,7 @@ export default function WeeklyPlanTableTheme({ themes }: { themes: Theme[] }) {
               themeIndex={themeIndex}
             />
             <tr>
-              <td onClick={() => createCategory(themeId)} colSpan={2}>
-                +
-              </td>
+              <td colSpan={2}></td>
               {weekDay.map((day) => (
                 <td key={day}>
                   {aggregatedThemeDaysTime({ themes, id: themeId })[day]}
@@ -76,7 +74,14 @@ function CategoryRow({
   themeIndex: number;
   categories: Category[];
 }) {
-  const { editTheme, editAction, editCategory } = useHandleWeeklyPlanTable();
+  const {
+    createCategory,
+    editTheme,
+    editAction,
+    editCategory,
+    deleteTheme,
+    deleteCategory,
+  } = useHandleWeeklyPlanTable();
 
   const handleTheme: (themeId: Theme["id"]) => FormEventHandler<HTMLElement> =
     (themeId) => (e) => {
@@ -94,7 +99,6 @@ function CategoryRow({
     const { innerText } = e.target as HTMLElement;
     editCategory({
       id: categoryId,
-      title: innerText,
       [type]: innerText,
     });
   };
@@ -131,26 +135,57 @@ function CategoryRow({
               <td
                 style={{
                   minWidth: 100,
+                  height: "100%",
+                  position: "relative",
                 }}
-                rowSpan={categories.length}
+                rowSpan={categories.length + 1}
               >
                 <div
                   suppressContentEditableWarning={true}
                   contentEditable
-                  onInput={handleTheme(themeId)}
+                  onBlur={handleTheme(themeId)}
                 >
                   {themeTitle}
                 </div>
+
+                <button
+                  className="deleteTheme"
+                  onClick={() => deleteTheme(themeId)}
+                  style={{
+                    position: "absolute",
+                    top: 0,
+                    right: 0,
+                    padding: 2,
+                  }}
+                >
+                  x
+                </button>
               </td>
             )}
             <td className={cellContainer}>
-              <Cell
-                handleEditTitle={handleCategory(categoryId, "title")}
-                handleEditTime={handleCategory(categoryId, "planned_time")}
-                time={planned_time || 0}
+              <div
+                style={{
+                  width: "100%",
+                  display: "flex",
+                }}
               >
-                {title}
-              </Cell>
+                <Cell
+                  handleEditTitle={handleCategory(categoryId, "title")}
+                  handleEditTime={handleCategory(categoryId, "planned_time")}
+                  time={planned_time}
+                >
+                  {title}
+                </Cell>
+                <button
+                  className="deleteCategory"
+                  onClick={() => deleteCategory(categoryId)}
+                  style={{
+                    padding: 2,
+                  }}
+                >
+                  x
+                </button>
+              </div>
             </td>
             {weekDay.map((day) => {
               const thisDayAction = actions.find(
@@ -172,7 +207,7 @@ function CategoryRow({
                       day,
                       "planned_time"
                     )}
-                    time={thisDayAction?.planned_time || 0}
+                    time={thisDayAction?.planned_time}
                   >
                     {thisDayAction?.title}
                   </Cell>
@@ -183,6 +218,14 @@ function CategoryRow({
           </tr>
         )
       )}
+      <tr className="addCategory">
+        <td
+          colSpan={9}
+          onClick={() => {
+            createCategory(themeId);
+          }}
+        ></td>
+      </tr>
     </>
   );
 }
@@ -198,6 +241,7 @@ function Cell({
   handleEditTime?: FocusEventHandler<HTMLDivElement>;
 }>) {
   const wrapper = css`
+    width: 100%;
     display: flex;
     gap: 12;
   `;
@@ -208,35 +252,31 @@ function Cell({
     wordBreak: "break-all",
   };
 
-  if (time !== undefined && time >= 0) {
-    return (
-      <div className={wrapper}>
-        <div
-          contentEditable
-          suppressContentEditableWarning={true}
-          onBlur={handleEditTitle}
-          style={{
-            ...cellStyle,
-            flexGrow: 1,
-          }}
-        >
-          {children}
-        </div>
-
-        <div
-          contentEditable
-          suppressContentEditableWarning={true}
-          onBlur={handleEditTime}
-          style={{
-            ...cellStyle,
-            width: 30,
-          }}
-        >
-          {time}
-        </div>
+  return (
+    <div className={wrapper}>
+      <div
+        contentEditable
+        suppressContentEditableWarning={true}
+        onBlur={handleEditTitle}
+        style={{
+          ...cellStyle,
+          flexGrow: 1,
+        }}
+      >
+        {children}
       </div>
-    );
-  } else {
-    return <div>{children}</div>;
-  }
+
+      <div
+        contentEditable
+        suppressContentEditableWarning={true}
+        onBlur={handleEditTime}
+        style={{
+          ...cellStyle,
+          width: 30,
+        }}
+      >
+        {Number(time) > 0 ? time : ""}
+      </div>
+    </div>
+  );
 }
