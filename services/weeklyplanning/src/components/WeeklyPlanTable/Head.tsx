@@ -1,20 +1,50 @@
+import useHandleWeeklyPlanTable from "../../hooks/useWeeklyPlanTable";
 import { getDatesOfIsoWeek } from "../../utils/getDatesOfIsoWeek";
 
-interface WeeklyPlanTableHeadProps {
-  year: number;
-  week: number;
-}
-export default function WeeklyPlanTableHead({
-  year,
-  week,
-}: WeeklyPlanTableHeadProps) {
-  const weekDates = getDatesOfIsoWeek(year, week);
+export default function WeeklyPlanTableHead() {
+  const { planState, editPlan } = useHandleWeeklyPlanTable();
+  const weekDates = getDatesOfIsoWeek(planState.year, planState.week);
+
+  const handlePlanWeek = (type: "next" | "prev") => {
+    if (type === "prev") {
+      editPlan({
+        id: planState.id,
+        week: planState.week > 1 ? planState.week - 1 : 12,
+        year: planState.week > 1 ? planState.year : planState.year - 1,
+      });
+    }
+    if (type === "next") {
+      editPlan({
+        id: planState.id,
+        week: planState.week < 12 ? planState.week + 1 : 1,
+        year: planState.week < 12 ? planState.year : planState.year + 1,
+      });
+    }
+  };
 
   return (
     <>
       <tr>
         <th rowSpan={4} colSpan={2}>
-          {`${year}-${week}번째 주 계획`}
+          <button
+            style={{
+              padding: 2,
+              margin: 10,
+            }}
+            onClick={() => handlePlanWeek("prev")}
+          >
+            &lt;
+          </button>
+          {`${planState.year}-${planState.week}번째 주 계획`}
+          <button
+            style={{
+              padding: 2,
+              margin: 10,
+            }}
+            onClick={() => handlePlanWeek("next")}
+          >
+            &gt;
+          </button>
         </th>
         {weekDates.map((date) => (
           <th key={date}>{date}</th>

@@ -51,6 +51,16 @@ export default function useHandleWeeklyPlanTable() {
     });
   };
 
+  const editPlan = (
+    options: { id: Plan["id"] } & Partial<Omit<Plan, "id" | "theme">>
+  ) => {
+    setPlanState((prevPlanState) => {
+      prevPlanState.week = options.week ?? prevPlanState.week;
+      prevPlanState.year = options.year ?? prevPlanState.year;
+      return JSON.parse(JSON.stringify(prevPlanState));
+    });
+  };
+
   const editTheme = (
     options: { id: Theme["id"] } & Partial<Omit<Theme, "id" | "categories">>
   ) => {
@@ -133,6 +143,7 @@ export default function useHandleWeeklyPlanTable() {
     createTheme,
     deleteTheme,
     deleteCategory,
+    editPlan,
     editTheme,
     editCategory,
     editAction,

@@ -7,7 +7,7 @@ export default function WeeklyPlannerTable({ data }: { data: Plan }) {
   return (
     <table border={1}>
       <thead>
-        <WeeklyPlanTableHead year={data.year} week={data.week} />
+        <WeeklyPlanTableHead />
       </thead>
       <tbody>
         <WeeklyPlanTableTheme themes={data.themes} />
