@@ -1,5 +1,6 @@
 import useHandleWeeklyPlanTable from "../../hooks/useWeeklyPlanTable";
 import { getDatesOfIsoWeek } from "../../utils/getDatesOfIsoWeek";
+import * as style from "./index.css";
 
 export default function WeeklyPlanTableHead() {
   const { planState, editPlan } = useHandleWeeklyPlanTable();
@@ -24,7 +25,7 @@ export default function WeeklyPlanTableHead() {
 
   return (
     <>
-      <tr>
+      <tr className={style.tableHeader}>
         <th rowSpan={4} colSpan={2}>
           <button
             style={{
@@ -51,7 +52,7 @@ export default function WeeklyPlanTableHead() {
         ))}
         <th rowSpan={2}>합계</th>
       </tr>
-      <tr>
+      <tr className={style.tableDateHeader}>
         <th>월</th>
         <th>화</th>
         <th>수</th>

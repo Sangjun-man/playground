@@ -1,13 +1,14 @@
 import {
-  CSSProperties,
   FocusEventHandler,
   FormEventHandler,
+  HTMLAttributes,
   PropsWithChildren,
 } from "react";
 import { aggregatedThemeDaysTime } from "../../utils/aggregatedTime";
 import { Action, Category, DayString, Theme } from "../../type";
 import useHandleWeeklyPlanTable from "../../hooks/useWeeklyPlanTable";
-import { css } from "@emotion/css";
+import * as style from "./index.css";
+import clsx from "clsx";
 
 const weekDay = [
   "mon",
@@ -34,7 +35,7 @@ export default function WeeklyPlanTableTheme({ themes }: { themes: Theme[] }) {
               themeTitle={themeTitle}
               themeIndex={themeIndex}
             />
-            <tr>
+            <tr className={style.themeDaysAggregatedRow}>
               <td colSpan={2}></td>
               {weekDay.map((day) => (
                 <td key={day}>
@@ -48,7 +49,7 @@ export default function WeeklyPlanTableTheme({ themes }: { themes: Theme[] }) {
       )}
       <tr>
         <td
-          className="addTheme"
+          className={style.addThemeRow}
           style={{
             height: 4,
             fontSize: 1,
@@ -73,7 +74,7 @@ function CategoryRow({
   themeTitle: string;
   themeIndex: number;
   categories: Category[];
-}) {
+} & HTMLAttributes<HTMLTableRowElement>) {
   const {
     createCategory,
     editTheme,
@@ -120,12 +121,6 @@ function CategoryRow({
       });
     };
 
-  const cellContainer = css`
-    position: relative;
-    min-width: 120px;
-    max-width: 160px;
-    width: 100%;
-  `;
   return (
     <>
       {categories.map(
@@ -133,11 +128,7 @@ function CategoryRow({
           <tr key={categoryId}>
             {categoryIndex === 0 && (
               <td
-                style={{
-                  minWidth: 100,
-                  height: "100%",
-                  position: "relative",
-                }}
+                className={style.themeTitleCell}
                 rowSpan={categories.length + 1}
               >
                 <div
@@ -149,7 +140,7 @@ function CategoryRow({
                 </div>
 
                 <button
-                  className="deleteTheme"
+                  className={style.deleteTheme}
                   onClick={() => deleteTheme(themeId)}
                   style={{
                     position: "absolute",
@@ -162,20 +153,21 @@ function CategoryRow({
                 </button>
               </td>
             )}
-            <td className={cellContainer}>
+            <td className={style.cellContainer}>
               <div
+                className="category"
                 style={{
                   width: "100%",
                   display: "flex",
                 }}
               >
-                <Cell
+                <TitleTimeSplitedCell
                   handleEditTitle={handleCategory(categoryId, "title")}
                   handleEditTime={handleCategory(categoryId, "planned_time")}
                   time={planned_time}
                 >
                   {title}
-                </Cell>
+                </TitleTimeSplitedCell>
                 <button
                   className="deleteCategory"
                   onClick={() => deleteCategory(categoryId)}
@@ -192,8 +184,8 @@ function CategoryRow({
                 (action) => action.day === day
               );
               return (
-                <td className={cellContainer}>
-                  <Cell
+                <td className={style.cellContainer}>
+                  <TitleTimeSplitedCell
                     key={day}
                     handleEditTitle={handleAction(
                       categoryIndex,
@@ -210,17 +202,19 @@ function CategoryRow({
                     time={thisDayAction?.planned_time}
                   >
                     {thisDayAction?.title}
-                  </Cell>
+                  </TitleTimeSplitedCell>
                 </td>
               );
             })}
-            <td>{actions.reduce((acc, cur) => acc + cur.planned_time, 0)}</td>
+            <td className={style.aggregatedCategoryTime}>
+              {actions.reduce((acc, cur) => acc + cur.planned_time, 0)}
+            </td>
           </tr>
         )
       )}
-      <tr className="addCategory">
+      <tr className={style.addCategoryRow}>
         <td
-          colSpan={9}
+          colSpan={categories.length ? 9 : 10}
           onClick={() => {
             createCategory(themeId);
           }}
@@ -230,7 +224,7 @@ function CategoryRow({
   );
 }
 
-function Cell({
+function TitleTimeSplitedCell({
   children,
   time,
   handleEditTitle = () => {},
@@ -240,26 +234,14 @@ function Cell({
   handleEditTitle?: FocusEventHandler<HTMLDivElement>;
   handleEditTime?: FocusEventHandler<HTMLDivElement>;
 }>) {
-  const wrapper = css`
-    width: 100%;
-    display: flex;
-    gap: 12;
-  `;
-  const cellStyle: CSSProperties = {
-    display: "flex",
-    justifyContent: "center",
-    overflow: "hidden",
-    wordBreak: "break-all",
-  };
-
   return (
-    <div className={wrapper}>
+    <div className={style.wrapper}>
       <div
         contentEditable
         suppressContentEditableWarning={true}
         onBlur={handleEditTitle}
+        className={clsx([style.cellStyle, style.content])}
         style={{
-          ...cellStyle,
           flexGrow: 1,
         }}
       >
@@ -270,8 +252,8 @@ function Cell({
         contentEditable
         suppressContentEditableWarning={true}
         onBlur={handleEditTime}
+        className={clsx([style.cellStyle, style.time])}
         style={{
-          ...cellStyle,
           width: 30,
         }}
       >
